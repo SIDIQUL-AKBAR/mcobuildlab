@@ -20,7 +20,7 @@ const STEPS = [
   'SERVER SIZE',
   'SERVER STYLE',
   'FEATURES',
-  'ROLE EXTENSIONS', // Sub-steps 6.1-6.8 grouped or handled dynamically
+  'SYSTEM SCALING',
   'SECURITY LEVEL',
   'COMMUNITY FEATURES',
   'STAFF SYSTEM',
@@ -34,8 +34,6 @@ const SERVER_SIZES = ['Under 100 Members', '100-500 Members', '500-1000 Members'
 const SERVER_STYLES = ['Modern', 'Gaming', 'Professional', 'Cyber', 'Premium', 'Aesthetic', 'Neon', 'Anime', 'Medieval', 'Futuristic'];
 const FEATURES = ['Verification', 'Tickets', 'Giveaways', 'Suggestions', 'Applications', 'Auto Roles', 'Leveling', 'Economy', 'Partnerships', 'Music', 'Events', 'Polls', 'Server Stats', 'Temporary Voice Channels', 'Shop System', 'Custom Commands'];
 const LEVEL_ROLES_OPTIONS = ['10', '25', '50', '100'];
-const SYSTEM_SIZES = ['Small', 'Medium', 'Large', 'Massive'];
-const VOICE_SIZES = ['Minimal', 'Standard', 'Large', 'Massive'];
 const DENSITIES = ['Compact', 'Standard', 'Large Community', 'Massive Community'];
 const COMPLEXITIES = ['⚡ Starter', '🚀 Advanced', '🏆 Professional', '👑 Enterprise'];
 const SECURITY_LEVELS = ['Basic', 'Standard', 'Advanced', 'Maximum'];
@@ -130,8 +128,8 @@ export default function WizardForm() {
             {step === 0 && (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
                 <div className="text-center">
-                  <h2 className="text-3xl font-bold mb-2 font-headline uppercase">Identity Establishment</h2>
-                  <p className="text-muted-foreground">Define the primary identification for your new server node.</p>
+                  <h2 className="text-3xl font-bold mb-2 font-headline uppercase">Node Identification</h2>
+                  <p className="text-muted-foreground">Define the primary identification for your MCO Build Lab project.</p>
                 </div>
                 <Input
                   placeholder="Enter Server Name"
@@ -445,7 +443,7 @@ export default function WizardForm() {
                 ) : (
                   <>
                     <Sparkles className="w-5 h-5" />
-                    Finalize Design
+                    Finalize Structure
                   </>
                 )}
               </Button>

@@ -23,7 +23,8 @@ import {
   Trophy,
   Palette,
   Star,
-  ChevronRight
+  ChevronRight,
+  ExternalLink
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -48,7 +49,7 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
     URL.revokeObjectURL(url);
     toast({
       title: "Architecture Exported",
-      description: "MCO Build AI JSON has been downloaded.",
+      description: "MCO Build Lab Blueprint JSON has been downloaded.",
     });
   };
 
@@ -58,10 +59,15 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
         <div>
           <h1 className="text-5xl font-bold text-accent font-headline tracking-tighter uppercase">{data.server_info.name}</h1>
           <p className="text-muted-foreground mt-2 uppercase tracking-widest text-xs">
-            Infrastructure Status: <span className="text-accent">Production Ready</span> • {data.analysis.complexity} Tier
+            Infrastructure Status: <span className="text-accent">Production Ready</span> • {data.analysis.complexity} Tier • Designed by MCO Build Lab
           </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
+          <Button asChild variant="secondary" className="bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20">
+            <a href="https://mcobuildlab.base44.app" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+              <ExternalLink className="w-4 h-4" /> Builder Tool
+            </a>
+          </Button>
           <Button variant="outline" onClick={onReset} className="flex items-center gap-2 border-accent/30 hover:bg-accent/10">
             <RefreshCw className="w-4 h-4" /> Re-Architect
           </Button>
@@ -224,7 +230,7 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
               <Card className="bg-card/40 border-accent/20">
                 <CardHeader>
                   <CardTitle className="text-sm font-headline uppercase flex items-center gap-2">
-                    <MessageSquare className="w-4 h-4 text-accent" /> Alerts
+                    <MessageSquare className="w-4 h-4 text-accent" /> Notifications
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -370,6 +376,18 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
           </div>
         </TabsContent>
       </Tabs>
+      
+      <div className="mt-12 p-8 bg-accent/5 rounded-3xl border border-accent/20 text-center space-y-4">
+        <h3 className="text-2xl font-bold font-headline uppercase text-accent">Ready to build?</h3>
+        <p className="text-muted-foreground max-w-xl mx-auto">
+          Take this blueprint and use our official builder tool to deploy your infrastructure instantly.
+        </p>
+        <Button asChild size="lg" className="bg-accent text-accent-foreground shadow-lg shadow-accent/20">
+          <a href="https://mcobuildlab.base44.app" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+            Go to MCO Build Lab Builder <ExternalLink className="w-4 h-4" />
+          </a>
+        </Button>
+      </div>
     </div>
   );
 }

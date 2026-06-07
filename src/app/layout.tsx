@@ -2,8 +2,8 @@ import type {Metadata} from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'MCO Build AI - Professional Discord Infrastructure Designer',
-  description: 'Design production-ready Discord servers that can be automatically imported and managed.',
+  title: 'MCO Build Lab - Professional Discord Infrastructure Designer',
+  description: 'Design production-ready Discord server structures. Build your community with MCO Build Lab.',
 };
 
 export default function RootLayout({
