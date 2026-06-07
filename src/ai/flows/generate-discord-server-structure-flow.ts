@@ -101,6 +101,7 @@ export type GenerateDiscordServerStructureOutput = z.infer<typeof GenerateDiscor
 
 const discordServerArchitectPrompt = ai.definePrompt({
   name: 'discordServerArchitectPrompt',
+  model: 'googleai/gemini-1.5-flash',
   input: { schema: GenerateDiscordServerStructureInputSchema },
   output: { schema: GenerateDiscordServerStructureOutputSchema },
   prompt: `You are MCO Build AI, a professional Discord Server Architect. Your task is to generate a complete, professional, scalable, and production-ready Discord server structure based on the user's preferences.
@@ -156,13 +157,15 @@ const generateDiscordServerStructureFlow = ai.defineFlow(
         return output;
       } catch (error: any) {
         lastError = error;
-        // If it's a 503 or 429, wait and retry
-        if (error.message?.includes('503') || error.message?.includes('429')) {
+        // Handle common transient errors
+        const msg = error.message || '';
+        if (msg.includes('503') || msg.includes('429') || msg.includes('UNAVAILABLE')) {
           if (i < maxRetries) {
             await new Promise(resolve => setTimeout(resolve, 2000 * (i + 1)));
             continue;
           }
         }
+        // If it's a 404 or other non-retriable error, we still throw
         throw error;
       }
     }
