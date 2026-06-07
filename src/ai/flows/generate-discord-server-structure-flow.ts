@@ -103,8 +103,7 @@ const discordServerArchitectPrompt = ai.definePrompt({
   name: 'discordServerArchitectPrompt',
   input: { schema: GenerateDiscordServerStructureInputSchema },
   output: { schema: GenerateDiscordServerStructureOutputSchema },
-  // Explicitly setting the model ID to ensure it routes correctly to the Google AI plugin
-  model: 'googleai/gemini-1.5-flash',
+  // Inherit model from the global ai instance to ensure consistency
   prompt: `You are MCO Build AI, a professional Discord Server Architect. Your task is to generate a complete, professional, scalable, and production-ready Discord server structure based on the user's preferences.
 
 Generate a single, valid JSON object containing the complete server blueprint. Ensure all fields in the output schema are thoroughly and thoughtfully populated, providing specific details and practical suggestions.
