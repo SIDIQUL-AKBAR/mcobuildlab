@@ -101,7 +101,6 @@ export type GenerateDiscordServerStructureOutput = z.infer<typeof GenerateDiscor
 
 const discordServerArchitectPrompt = ai.definePrompt({
   name: 'discordServerArchitectPrompt',
-  model: 'googleai/gemini-1.5-flash',
   input: { schema: GenerateDiscordServerStructureInputSchema },
   output: { schema: GenerateDiscordServerStructureOutputSchema },
   prompt: `You are MCO Build AI, a professional Discord Server Architect. Your task is to generate a complete, professional, scalable, and production-ready Discord server structure based on the user's preferences.
@@ -157,15 +156,15 @@ const generateDiscordServerStructureFlow = ai.defineFlow(
         return output;
       } catch (error: any) {
         lastError = error;
-        // Handle common transient errors
-        const msg = error.message || '';
-        if (msg.includes('503') || msg.includes('429') || msg.includes('UNAVAILABLE')) {
-          if (i < maxRetries) {
-            await new Promise(resolve => setTimeout(resolve, 2000 * (i + 1)));
-            continue;
-          }
+        // Handle transient errors with exponential backoff
+        const msg = (error.message || '').toLowerCase();
+        const isRetriable = msg.includes('503') || msg.includes('429') || msg.includes('unavailable') || msg.includes('rate limit');
+        
+        if (isRetriable && i < maxRetries) {
+          await new Promise(resolve => setTimeout(resolve, 2000 * (i + 1)));
+          continue;
         }
-        // If it's a 404 or other non-retriable error, we still throw
+        // If not retriable or no retries left, throw the error
         throw error;
       }
     }
