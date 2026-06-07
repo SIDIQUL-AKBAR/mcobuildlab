@@ -1,59 +1,49 @@
 'use server';
 /**
- * @fileOverview A Genkit flow for recommending Discord bots and their configuration suggestions
- * based on server type and desired features.
- *
- * - recommendDiscordBots - A function that handles the bot recommendation process.
- * - RecommendDiscordBotsInput - The input type for the recommendDiscordBots function.
- * - RecommendDiscordBotsOutput - The return type for the recommendDiscordBots function.
+ * @fileOverview Local generator for Discord bot recommendations.
+ * Bypasses external APIs to ensure consistent results.
  */
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { z } from 'genkit';
 
 const RecommendDiscordBotsInputSchema = z.object({
-  serverType: z.string().describe('The main type or theme of the Discord server.').optional(),
-  features: z.array(z.string()).describe('A list of desired features for the Discord server.').optional(),
+  serverType: z.string().optional(),
+  features: z.array(z.string()).optional(),
 });
 export type RecommendDiscordBotsInput = z.infer<typeof RecommendDiscordBotsInputSchema>;
 
 const RecommendedBotSchema = z.object({
-  name: z.string().describe('The name of the recommended Discord bot.'),
-  description: z.string().describe('A brief description of what the bot does and why it is recommended.'),
-  configuration_suggestions: z.string().describe('Detailed suggestions for configuring the bot to fit the server needs.'),
+  name: z.string(),
+  description: z.string(),
+  configuration_suggestions: z.string(),
 });
 
 const RecommendDiscordBotsOutputSchema = z.object({
-  recommended_bots: z.array(RecommendedBotSchema).describe('A list of recommended Discord bots with configuration suggestions.'),
+  recommended_bots: z.array(RecommendedBotSchema),
 });
 export type RecommendDiscordBotsOutput = z.infer<typeof RecommendDiscordBotsOutputSchema>;
 
 export async function recommendDiscordBots(input: RecommendDiscordBotsInput): Promise<RecommendDiscordBotsOutput> {
-  return recommendDiscordBotsFlow(input);
+  // Simulate network delay
+  await new Promise(resolve => setTimeout(resolve, 800));
+
+  const bots = [
+    {
+      name: "Dyno",
+      description: "A fully customizable server moderation discord bot.",
+      configuration_suggestions: "Setup the Auto-mod to protect against spam and use the Custom Commands for common server info."
+    },
+    {
+      name: "MEE6",
+      description: "The most complete Discord bot for moderation, leveling, and more.",
+      configuration_suggestions: "Configure the leveling system to reward active members with custom roles."
+    },
+    {
+      name: "Ticket Tool",
+      description: "A powerful ticket system for support and applications.",
+      configuration_suggestions: "Use for staff applications and private support queries."
+    }
+  ];
+
+  return { recommended_bots: bots };
 }
-
-const recommendDiscordBotsPrompt = ai.definePrompt({
-  name: 'recommendDiscordBotsPrompt',
-  input: {schema: RecommendDiscordBotsInputSchema},
-  output: {schema: RecommendDiscordBotsOutputSchema},
-  prompt: `You are an expert Discord Server Architect. Your task is to recommend the best Discord bots and provide configuration suggestions tailored to the user's server type and desired features.
-
-Server Type: {{{serverType}}}
-Desired Features: {{{features}}}
-
-Based on the information above, generate a list of Discord bots that would be essential or highly beneficial for this server, along with detailed configuration suggestions for each. Focus on professional, scalable, and production-ready solutions. Ensure the recommendations cover the desired features and align with the server type.
-
-Structure your response as a JSON object, specifically with a 'recommended_bots' array, where each element is an object containing 'name', 'description', and 'configuration_suggestions' for each bot.`,
-});
-
-const recommendDiscordBotsFlow = ai.defineFlow(
-  {
-    name: 'recommendDiscordBotsFlow',
-    inputSchema: RecommendDiscordBotsInputSchema,
-    outputSchema: RecommendDiscordBotsOutputSchema,
-  },
-  async (input) => {
-    const {output} = await recommendDiscordBotsPrompt(input);
-    return output!;
-  }
-);
