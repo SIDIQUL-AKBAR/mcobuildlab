@@ -156,15 +156,19 @@ const generateDiscordServerStructureFlow = ai.defineFlow(
         return output;
       } catch (error: any) {
         lastError = error;
-        // Handle transient errors with exponential backoff
         const msg = (error.message || '').toLowerCase();
+        
+        // Don't retry on configuration errors (like 404 model not found)
+        if (msg.includes('404') || msg.includes('not found')) {
+          throw new Error(`Architect Configuration Error: The specified AI model was not found. Please contact support. (Internal: ${error.message})`);
+        }
+
         const isRetriable = msg.includes('503') || msg.includes('429') || msg.includes('unavailable') || msg.includes('rate limit');
         
         if (isRetriable && i < maxRetries) {
           await new Promise(resolve => setTimeout(resolve, 2000 * (i + 1)));
           continue;
         }
-        // If not retriable or no retries left, throw the error
         throw error;
       }
     }
