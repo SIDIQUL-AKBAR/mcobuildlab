@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { ArrowLeft, ArrowRight, Loader2, Sparkles } from 'lucide-react';
 import { generateDiscordServerStructure, GenerateDiscordServerStructureInput, GenerateDiscordServerStructureOutput } from '@/ai/flows/generate-discord-server-structure-flow';
 import ServerResult from '@/components/ServerResult';
+import { useToast } from '@/hooks/use-toast';
 
 const STEPS = [
   'SERVER NAME',
@@ -35,6 +36,7 @@ const MONETIZATION_OPTIONS = ['No', 'Donations', 'Products', 'Premium Membership
 const LANGUAGES = ['English', 'English + Hindi', 'English + Malayalam', 'Multi-Language'];
 
 export default function WizardForm() {
+  const { toast } = useToast();
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<GenerateDiscordServerStructureOutput | null>(null);
@@ -75,8 +77,15 @@ export default function WizardForm() {
     try {
       const output = await generateDiscordServerStructure(formData as GenerateDiscordServerStructureInput);
       setResult(output);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      toast({
+        variant: "destructive",
+        title: "AI Architect Unavailable",
+        description: error.message?.includes('503') 
+          ? "The AI model is currently busy. Please wait a moment and try again." 
+          : "Failed to generate server blueprint. Please try again.",
+      });
     } finally {
       setLoading(false);
     }

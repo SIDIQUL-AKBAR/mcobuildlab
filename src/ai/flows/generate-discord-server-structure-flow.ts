@@ -144,11 +144,29 @@ const generateDiscordServerStructureFlow = ai.defineFlow(
     outputSchema: GenerateDiscordServerStructureOutputSchema,
   },
   async (input) => {
-    const { output } = await discordServerArchitectPrompt(input);
-    if (!output) {
-      throw new Error('Failed to generate Discord server structure.');
+    let lastError = null;
+    const maxRetries = 2;
+    
+    for (let i = 0; i <= maxRetries; i++) {
+      try {
+        const { output } = await discordServerArchitectPrompt(input);
+        if (!output) {
+          throw new Error('No output received from AI model.');
+        }
+        return output;
+      } catch (error: any) {
+        lastError = error;
+        // If it's a 503 or 429, wait and retry
+        if (error.message?.includes('503') || error.message?.includes('429')) {
+          if (i < maxRetries) {
+            await new Promise(resolve => setTimeout(resolve, 2000 * (i + 1)));
+            continue;
+          }
+        }
+        throw error;
+      }
     }
-    return output;
+    throw lastError || new Error('Failed to generate Discord server structure.');
   }
 );
 
