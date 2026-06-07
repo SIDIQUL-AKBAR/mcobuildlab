@@ -57,8 +57,11 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-accent/20 pb-8">
         <div>
           <h1 className="text-5xl font-bold text-accent font-headline tracking-tighter uppercase">{data.server_info.name}</h1>
-          <p className="text-muted-foreground mt-2 uppercase tracking-widest text-xs">
-            Infrastructure Status: <span className="text-accent">Production Ready</span> • {data.analysis.complexity} Tier • Designed by MCO Build Lab
+          <p className="text-muted-foreground mt-2 uppercase tracking-widest text-[10px]">
+            Infrastructure Status: <span className="text-accent">Production Ready</span> • {data.analysis.complexity} Tier
+          </p>
+          <p className="text-[10px] text-muted-foreground/60 uppercase tracking-[0.2em] mt-2">
+            Master Coding Organisation • Architect: Sidiqul Akbar
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
@@ -109,7 +112,7 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
           <Card className="bg-card/40 border-accent/20">
             <CardHeader>
               <CardTitle className="font-headline uppercase">Infrastructural Overview</CardTitle>
-              <CardDescription>Strategic deployment roadmap for the {data.server_info.name} node.</CardDescription>
+              <CardDescription>Strategic deployment roadmap for the {data.server_info.name} node by MCO Build Lab.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
                <div className="grid md:grid-cols-2 gap-6">
@@ -171,7 +174,7 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <ScrollArea className="h-[300px] pr-4">
+                    <ScrollArea className="h-[400px] pr-4">
                       <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3">
                         {data.level_roles.map((role, idx) => (
                           <div key={idx} className={`p-3 rounded-lg border text-center transition-all ${role.special ? 'bg-accent/10 border-accent/30 shadow-md' : 'bg-secondary/20 border-accent/5'}`}>
@@ -214,6 +217,16 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
                       </div>
                     </div>
                   )}
+                  {data.achievement_roles.length > 0 && (
+                    <div className="space-y-2">
+                      <label className="text-[10px] uppercase font-bold text-muted-foreground">Achievements</label>
+                      <div className="flex flex-wrap gap-1.5">
+                        {data.achievement_roles.map((role, i) => (
+                          <Badge key={i} variant="outline" className="text-[9px] border-accent/30 bg-accent/5 text-accent">{role.name}</Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -227,7 +240,7 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
                    <CardTitle className="text-xs uppercase text-accent font-bold">Category Distribution</CardTitle>
                 </CardHeader>
                 <CardContent>
-                   <ScrollArea className="h-[500px] pr-4">
+                   <ScrollArea className="h-[600px] pr-4">
                      <div className="space-y-3">
                         {data.categories.map((cat, i) => (
                           <div key={i} className="flex items-center justify-between p-3 bg-secondary/20 rounded-lg border border-accent/5">
@@ -249,7 +262,7 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
                    </div>
                 </CardHeader>
                 <CardContent>
-                   <ScrollArea className="h-[500px] pr-4">
+                   <ScrollArea className="h-[600px] pr-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         {data.channels.map((chan, i) => (
                           <div key={`text-${i}`} className="flex items-center justify-between p-2.5 bg-secondary/10 rounded-lg border border-white/5 hover:border-accent/10 transition-all">
@@ -311,7 +324,7 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
                    <div className="p-3 bg-secondary/10 rounded-lg">
                       <label className="text-[10px] uppercase font-bold text-muted-foreground">Auto Roles</label>
                       <div className="mt-1 flex flex-wrap gap-1">
-                        {data.auto_roles.on_join.map((r: string) => <Badge key={r} variant="outline" className="text-[8px]">{r}</Badge>)}
+                        {data.auto_roles.on_join?.map((r: string) => <Badge key={r} variant="outline" className="text-[8px]">{r}</Badge>)}
                       </div>
                    </div>
                    <div className="p-3 bg-secondary/10 rounded-lg">
@@ -341,7 +354,7 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
                   <div className="bg-secondary/20 p-3 rounded-lg border border-accent/5">
                     <p className="text-[10px] uppercase font-bold text-accent mb-1">Config Suggestions</p>
                     <p className="text-[11px] text-muted-foreground leading-relaxed">
-                      Default production configuration for ${data.server_info.style} architecture applied.
+                      {bot.configuration_suggestions || `Default production configuration for ${data.server_info.style} architecture applied.`}
                     </p>
                   </div>
                 </CardContent>

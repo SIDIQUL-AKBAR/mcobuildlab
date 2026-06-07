@@ -7,7 +7,7 @@ export default function Home() {
     <main className="min-h-screen blueprint-grid relative">
       <div className="max-w-7xl mx-auto px-4 py-12">
         <header className="mb-12 text-center">
-          <div className="flex items-center justify-center gap-3 mb-4">
+          <div className="flex items-center justify-center gap-3 mb-2">
             <div className="bg-accent/20 p-3 rounded-2xl border border-accent/30">
               <LayoutGrid className="w-8 h-8 text-accent" />
             </div>
@@ -15,7 +15,15 @@ export default function Home() {
               MCO Build Lab
             </h1>
           </div>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-6">
+          <div className="mb-6">
+            <p className="text-accent/60 text-[10px] font-bold uppercase tracking-[0.3em] mb-1">
+              A tool by Master Coding Organisation
+            </p>
+            <p className="text-muted-foreground/40 text-[9px] uppercase tracking-widest">
+              Developed by Sidiqul Akbar
+            </p>
+          </div>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-8">
             Elite Discord Server Architect & Structure Designer. 
             Blueprint production-ready channels, roles, and rules for professional communities.
           </p>
