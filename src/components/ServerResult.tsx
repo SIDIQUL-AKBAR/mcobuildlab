@@ -19,12 +19,11 @@ import {
   MessageSquare,
   FileJson,
   LayoutTemplate,
-  Mic2,
-  Trophy,
   Palette,
-  Star,
   ChevronRight,
-  ExternalLink
+  ExternalLink,
+  BookOpen,
+  Send
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -99,11 +98,11 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
 
       <Tabs defaultValue="architecture" className="space-y-6">
         <TabsList className="bg-secondary/30 p-1 border border-accent/10 w-full flex overflow-x-auto no-scrollbar justify-start">
-          <TabsTrigger value="architecture" className="data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">Core Architecture</TabsTrigger>
+          <TabsTrigger value="architecture">Core Architecture</TabsTrigger>
           <TabsTrigger value="hierarchy">Role Hierarchy</TabsTrigger>
-          <TabsTrigger value="channels">Channels & Categories</TabsTrigger>
-          <TabsTrigger value="automation">Automation & Bots</TabsTrigger>
-          <TabsTrigger value="protocols">Security Protocols</TabsTrigger>
+          <TabsTrigger value="channels">Channels & Voice</TabsTrigger>
+          <TabsTrigger value="onboarding">Onboarding & Rules</TabsTrigger>
+          <TabsTrigger value="automation">Automation</TabsTrigger>
         </TabsList>
 
         <TabsContent value="architecture">
@@ -157,7 +156,6 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
                          <h4 className="font-bold uppercase tracking-tight text-xs" style={{ color: role.color }}>{role.name}</h4>
                          <div className="flex flex-wrap gap-1.5 mt-1">
                             {role.permissions?.map((p: string) => <Badge key={p} variant="secondary" className="text-[8px] uppercase py-0">{p}</Badge>)}
-                            {role.hoist && <Badge className="text-[8px] bg-accent/20 text-accent border-accent/30 py-0">HOISTED</Badge>}
                          </div>
                       </div>
                     </div>
@@ -169,18 +167,20 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
                 <Card className="bg-card/40 border-accent/20">
                   <CardHeader>
                     <CardTitle className="text-sm font-headline uppercase flex items-center gap-2">
-                      <Zap className="w-4 h-4 text-accent" /> Leveling Hierarchy
+                      <Zap className="w-4 h-4 text-accent" /> Leveling Hierarchy ({data.level_roles.length} Roles)
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3">
-                      {data.level_roles.map((role, idx) => (
-                        <div key={idx} className="p-3 bg-secondary/20 rounded-lg border border-accent/5 text-center">
-                          <p className="text-[10px] font-bold uppercase truncate" style={{ color: role.color }}>{role.name}</p>
-                          <Badge variant="outline" className="text-[8px] mt-1 border-accent/20">REQ: {role.requirement}</Badge>
-                        </div>
-                      ))}
-                    </div>
+                    <ScrollArea className="h-[300px] pr-4">
+                      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3">
+                        {data.level_roles.map((role, idx) => (
+                          <div key={idx} className={`p-3 rounded-lg border text-center transition-all ${role.special ? 'bg-accent/10 border-accent/30 shadow-md' : 'bg-secondary/20 border-accent/5'}`}>
+                            <p className="text-[10px] font-bold uppercase truncate" style={{ color: role.color }}>{role.name}</p>
+                            <Badge variant="outline" className="text-[8px] mt-1 border-accent/20">REQ: {role.requirement}</Badge>
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
                   </CardContent>
                 </Card>
               )}
@@ -190,7 +190,7 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
               <Card className="bg-card/40 border-accent/20">
                 <CardHeader>
                   <CardTitle className="text-sm font-headline uppercase flex items-center gap-2">
-                    <Palette className="w-4 h-4 text-accent" /> Cosmetics
+                    <Palette className="w-4 h-4 text-accent" /> Cosmetic Systems
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -206,7 +206,7 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
                   )}
                   {data.fun_roles.length > 0 && (
                     <div className="space-y-2">
-                      <label className="text-[10px] uppercase font-bold text-muted-foreground">Engagement Roles</label>
+                      <label className="text-[10px] uppercase font-bold text-muted-foreground">Fun & Social</label>
                       <div className="flex flex-wrap gap-1.5">
                         {data.fun_roles.map((role, i) => (
                           <Badge key={i} variant="outline" className="text-[9px] border-accent/10">{role.name}</Badge>
@@ -214,31 +214,6 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
                       </div>
                     </div>
                   )}
-                  {data.achievement_roles.length > 0 && (
-                    <div className="space-y-2">
-                      <label className="text-[10px] uppercase font-bold text-muted-foreground">Achievement Unlocks</label>
-                      <div className="flex flex-wrap gap-1.5">
-                        {data.achievement_roles.map((role, i) => (
-                          <Badge key={i} className="text-[9px] bg-yellow-500/10 text-yellow-500 border-yellow-500/20">{role.name}</Badge>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              <Card className="bg-card/40 border-accent/20">
-                <CardHeader>
-                  <CardTitle className="text-sm font-headline uppercase flex items-center gap-2">
-                    <MessageSquare className="w-4 h-4 text-accent" /> Notifications
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {data.notification_roles.map((role, i) => (
-                      <Badge key={i} variant="secondary" className="text-[9px] uppercase">{role.name}</Badge>
-                    ))}
-                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -267,7 +242,7 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
 
               <Card className="bg-card/40 border-accent/10 lg:col-span-2">
                 <CardHeader className="flex flex-row items-center justify-between">
-                   <CardTitle className="text-xs uppercase text-accent font-bold">Channel Matrix</CardTitle>
+                   <CardTitle className="text-xs uppercase text-accent font-bold">Network Matrix</CardTitle>
                    <div className="flex gap-4">
                      <Badge variant="outline" className="text-[9px] gap-1"><Hash className="w-2 h-2" /> {data.channels.length} TEXT</Badge>
                      <Badge variant="outline" className="text-[9px] gap-1"><Volume2 className="w-2 h-2" /> {data.voice_channels.length} VOICE</Badge>
@@ -276,7 +251,6 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
                 <CardContent>
                    <ScrollArea className="h-[500px] pr-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        {/* Text Channels */}
                         {data.channels.map((chan, i) => (
                           <div key={`text-${i}`} className="flex items-center justify-between p-2.5 bg-secondary/10 rounded-lg border border-white/5 hover:border-accent/10 transition-all">
                              <span className="text-sm flex items-center gap-2">
@@ -285,7 +259,6 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
                              <Badge className="text-[8px] uppercase font-light" variant="secondary">{chan.category}</Badge>
                           </div>
                         ))}
-                        {/* Voice Channels */}
                         {data.voice_channels.map((chan, i) => (
                           <div key={`voice-${i}`} className="flex items-center justify-between p-2.5 bg-accent/5 rounded-lg border border-accent/10 hover:border-accent/30 transition-all">
                              <span className="text-sm flex items-center gap-2 text-accent">
@@ -299,6 +272,56 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
                 </CardContent>
               </Card>
            </div>
+        </TabsContent>
+
+        <TabsContent value="onboarding">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card className="bg-card/40 border-accent/20">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-sm uppercase font-headline">
+                   <BookOpen className="w-4 h-4 text-accent" /> Server Guidelines (Rules)
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  {data.rules_list.map((rule: string, i: number) => (
+                    <div key={i} className="flex gap-4 p-3 bg-secondary/10 rounded-xl border border-accent/5">
+                      <span className="text-accent font-bold text-xs">{i + 1}.</span>
+                      <p className="text-xs text-muted-foreground leading-relaxed">{rule}</p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-card/40 border-accent/20">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-sm uppercase font-headline">
+                   <Send className="w-4 h-4 text-accent" /> Welcome Protocol
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="p-5 bg-accent/5 rounded-2xl border border-accent/10 relative">
+                   <div className="absolute top-4 right-4 text-[10px] uppercase font-bold text-accent/40 tracking-widest">Preview</div>
+                   <p className="text-sm whitespace-pre-wrap leading-relaxed italic text-muted-foreground">
+                     {data.welcome_message}
+                   </p>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                   <div className="p-3 bg-secondary/10 rounded-lg">
+                      <label className="text-[10px] uppercase font-bold text-muted-foreground">Auto Roles</label>
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {data.auto_roles.on_join.map((r: string) => <Badge key={r} variant="outline" className="text-[8px]">{r}</Badge>)}
+                      </div>
+                   </div>
+                   <div className="p-3 bg-secondary/10 rounded-lg">
+                      <label className="text-[10px] uppercase font-bold text-muted-foreground">Mechanism</label>
+                      <p className="text-[10px] font-bold text-accent mt-1">{data.verification_system.method}</p>
+                   </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
 
         <TabsContent value="automation">
@@ -316,9 +339,9 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
                 </CardHeader>
                 <CardContent>
                   <div className="bg-secondary/20 p-3 rounded-lg border border-accent/5">
-                    <p className="text-[10px] uppercase font-bold text-accent mb-1">Configuration Suggestions</p>
+                    <p className="text-[10px] uppercase font-bold text-accent mb-1">Config Suggestions</p>
                     <p className="text-[11px] text-muted-foreground leading-relaxed">
-                      {bot.configuration_suggestions || "Default production configuration applied."}
+                      Default production configuration for ${data.server_info.style} architecture applied.
                     </p>
                   </div>
                 </CardContent>
@@ -326,61 +349,12 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
             ))}
           </div>
         </TabsContent>
-
-        <TabsContent value="protocols">
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card className="bg-card/40 border-accent/10">
-              <CardHeader>
-                 <CardTitle className="flex items-center gap-2 text-sm uppercase font-headline">
-                    <Shield className="w-4 h-4 text-accent" /> Moderation Core
-                 </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                 <div className="p-3 bg-accent/5 rounded-lg border border-accent/10">
-                    <label className="text-[10px] uppercase text-muted-foreground font-bold">Security Level</label>
-                    <p className="font-bold text-accent">{data.security_system.level}</p>
-                 </div>
-                 <div className="grid grid-cols-2 gap-3">
-                   <div className="flex flex-col p-3 bg-secondary/10 rounded-lg">
-                      <span className="text-[10px] text-muted-foreground uppercase font-bold">Anti-Spam</span>
-                      <Badge className="mt-1 w-fit" variant={data.security_system.anti_spam ? 'default' : 'outline'}>
-                        {data.security_system.anti_spam ? 'ACTIVE' : 'OFF'}
-                      </Badge>
-                   </div>
-                   <div className="flex flex-col p-3 bg-secondary/10 rounded-lg">
-                      <span className="text-[10px] text-muted-foreground uppercase font-bold">Anti-Raid</span>
-                      <Badge className="mt-1 w-fit" variant={data.security_system.anti_raid ? 'default' : 'outline'}>
-                        {data.security_system.anti_raid ? 'ACTIVE' : 'OFF'}
-                      </Badge>
-                   </div>
-                 </div>
-              </CardContent>
-            </Card>
-            <Card className="bg-card/40 border-accent/10">
-              <CardHeader>
-                 <CardTitle className="flex items-center gap-2 text-sm uppercase font-headline">
-                    <MessageSquare className="w-4 h-4 text-accent" /> Verification Protocol
-                 </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                 <div className="p-3 bg-accent/5 rounded-lg border border-accent/10">
-                    <label className="text-[10px] uppercase text-muted-foreground font-bold">Mechanism</label>
-                    <p className="font-bold text-accent">{data.verification_system.method}</p>
-                 </div>
-                 <div className="p-3 bg-secondary/10 rounded-lg border border-accent/5">
-                    <label className="text-[10px] uppercase text-muted-foreground font-bold">Landing Hub</label>
-                    <p className="text-xs text-accent">#{data.channels.find(c => c.type === 'welcome' || c.name.includes('verify'))?.name || 'verification'}</p>
-                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
       </Tabs>
       
       <div className="mt-12 p-8 bg-accent/5 rounded-3xl border border-accent/20 text-center space-y-4">
         <h3 className="text-2xl font-bold font-headline uppercase text-accent">Ready to build?</h3>
         <p className="text-muted-foreground max-w-xl mx-auto">
-          Take this blueprint and use our official builder tool to deploy your infrastructure instantly.
+          Take this blueprint JSON and use our official builder tool to deploy your infrastructure instantly.
         </p>
         <Button asChild size="lg" className="bg-accent text-accent-foreground shadow-lg shadow-accent/20">
           <a href="https://mcobuildlab.base44.app" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
