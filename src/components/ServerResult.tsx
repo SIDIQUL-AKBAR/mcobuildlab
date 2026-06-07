@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
 import { GenerateDiscordServerStructureOutput } from '@/ai/flows/generate-discord-server-structure-flow';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -16,10 +16,11 @@ import {
   Download, 
   RefreshCw, 
   Settings, 
-  CheckCircle2, 
   Zap,
   Lock,
-  MessageSquare
+  MessageSquare,
+  FileJson,
+  LayoutTemplate
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -43,196 +44,108 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     toast({
-      title: "Blueprint Exported",
-      description: "Server configuration JSON has been downloaded.",
+      title: "Architecture Exported",
+      description: "MCO Build AI JSON has been downloaded.",
     });
   };
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-20">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-accent/20 pb-8">
         <div>
-          <h1 className="text-4xl font-bold text-accent font-headline">{data.server_info.name}</h1>
-          <p className="text-muted-foreground mt-1">Architecture Blueprint v1.0 • {data.server_info.style} Aesthetic</p>
+          <h1 className="text-5xl font-bold text-accent font-headline tracking-tighter uppercase">{data.server_info.name}</h1>
+          <p className="text-muted-foreground mt-2 uppercase tracking-widest text-xs">
+            Infrastructure Status: <span className="text-accent">Production Ready</span> • {data.analysis.complexity} Tier
+          </p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={onReset} className="flex items-center gap-2">
-            <RefreshCw className="w-4 h-4" /> Start Over
+        <div className="flex gap-3">
+          <Button variant="outline" onClick={onReset} className="flex items-center gap-2 border-accent/30 hover:bg-accent/10">
+            <RefreshCw className="w-4 h-4" /> Re-Architect
           </Button>
-          <Button onClick={handleExport} className="bg-accent text-accent-foreground flex items-center gap-2">
-            <Download className="w-4 h-4" /> Export JSON
+          <Button onClick={handleExport} className="bg-accent text-accent-foreground flex items-center gap-2 shadow-lg shadow-accent/20">
+            <FileJson className="w-4 h-4" /> Export JSON
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="bg-card/40 border-primary/20">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-              <Users className="w-4 h-4" /> Community Scale
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{data.server_info.size}</p>
-          </CardContent>
-        </Card>
-        <Card className="bg-card/40 border-primary/20">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-              <Shield className="w-4 h-4" /> Security Protocol
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{data.server_settings.verification_level}</p>
-          </CardContent>
-        </Card>
-        <Card className="bg-card/40 border-primary/20">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-              <Zap className="w-4 h-4" /> Primary Type
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{data.server_info.type}</p>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {[
+          { label: 'Network Scale', value: data.server_info.size, icon: Users },
+          { label: 'Security Level', value: data.analysis.security_baseline, icon: Shield },
+          { label: 'Vertical', value: data.server_info.type, icon: Zap },
+          { label: 'Complexity', value: data.analysis.complexity, icon: LayoutTemplate },
+        ].map((stat, i) => (
+          <Card key={i} className="bg-card/40 border-accent/10 hover:border-accent/30 transition-all">
+            <CardHeader className="pb-2 pt-4">
+              <CardTitle className="text-[10px] uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                <stat.icon className="w-3 h-3 text-accent" /> {stat.label}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-xl font-bold">{stat.value}</p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
-      <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="bg-secondary/50 p-1 border border-border w-full flex overflow-x-auto no-scrollbar justify-start">
-          <TabsTrigger value="overview">Architecture Overview</TabsTrigger>
+      <Tabs defaultValue="architecture" className="space-y-6">
+        <TabsList className="bg-secondary/30 p-1 border border-accent/10 w-full flex overflow-x-auto no-scrollbar justify-start">
+          <TabsTrigger value="architecture" className="data-[state=active]:bg-accent data-[state=active]:text-accent-foreground">Core Architecture</TabsTrigger>
+          <TabsTrigger value="hierarchy">Role Hierarchy</TabsTrigger>
           <TabsTrigger value="channels">Channels & Categories</TabsTrigger>
-          <TabsTrigger value="roles">Role Hierarchy</TabsTrigger>
-          <TabsTrigger value="bots">Automation Stack</TabsTrigger>
-          <TabsTrigger value="security">Security & Systems</TabsTrigger>
+          <TabsTrigger value="automation">Automation & Bots</TabsTrigger>
+          <TabsTrigger value="protocols">Security Protocols</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview">
-          <Card className="bg-card/40 border-border">
+        <TabsContent value="architecture">
+          <Card className="bg-card/40 border-accent/20">
             <CardHeader>
-              <CardTitle>Architectural Analysis</CardTitle>
-              <CardDescription>Strategic overview of your community structure.</CardDescription>
+              <CardTitle className="font-headline uppercase">Infrastructural Overview</CardTitle>
+              <CardDescription>Strategic deployment roadmap for the {data.server_info.name} node.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="bg-secondary/30 p-6 rounded-2xl border border-primary/10 leading-relaxed">
-                {data.server_info.description}
-              </div>
-              
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <h3 className="text-lg font-bold flex items-center gap-2"><CheckCircle2 className="w-5 h-5 text-accent" /> Growth Strategy</h3>
-                  <p className="text-muted-foreground text-sm">{data.growth_features.overview}</p>
-                  <ul className="grid gap-2 text-sm">
-                    <li className="flex items-start gap-2 text-muted-foreground">
-                      <div className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shrink-0" />
-                      {data.growth_features.community_engagement_strategies}
-                    </li>
-                  </ul>
-                </div>
-                <div className="space-y-4">
-                  <h3 className="text-lg font-bold flex items-center gap-2"><Lock className="w-5 h-5 text-accent" /> Security Philosophy</h3>
-                  <p className="text-muted-foreground text-sm">{data.security_system.overview}</p>
-                  <p className="text-muted-foreground text-sm italic">{data.permissions.overview}</p>
-                </div>
-              </div>
+               <div className="grid md:grid-cols-2 gap-6">
+                 <div className="space-y-4">
+                    <h3 className="text-sm font-bold uppercase tracking-widest text-accent flex items-center gap-2">
+                      <Lock className="w-4 h-4" /> Onboarding Flow
+                    </h3>
+                    <div className="flex gap-2">
+                      {data.onboarding_setup.flow.map((step: string, i: number) => (
+                        <div key={i} className="flex items-center gap-2">
+                          <Badge variant="outline">{step}</Badge>
+                          {i < data.onboarding_setup.flow.length - 1 && <span className="text-muted-foreground">→</span>}
+                        </div>
+                      ))}
+                    </div>
+                 </div>
+                 <div className="space-y-4">
+                    <h3 className="text-sm font-bold uppercase tracking-widest text-accent flex items-center gap-2">
+                      <Zap className="w-4 h-4" /> Growth Logic
+                    </h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{data.growth_features.overview}</p>
+                 </div>
+               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="channels">
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card className="bg-card/40 border-border">
-              <CardHeader>
-                <CardTitle>Categories & Perms</CardTitle>
-                <CardDescription>Logical groupings and access overrides.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ScrollArea className="h-[500px] pr-4">
-                  <div className="space-y-6">
-                    {data.categories.map((cat, idx) => (
-                      <div key={idx} className="border-l-2 border-primary/30 pl-4 py-1">
-                        <h4 className="font-bold text-accent uppercase tracking-wider text-sm flex items-center justify-between">
-                          {cat.name}
-                          <Badge variant="outline" className="text-[10px]">Category</Badge>
-                        </h4>
-                        <p className="text-xs text-muted-foreground mb-3">{cat.description}</p>
-                        <div className="space-y-1">
-                          {cat.text_channels.map(ch => (
-                            <div key={ch} className="flex items-center gap-2 text-sm text-foreground/80">
-                              <Hash className="w-3 h-3 text-muted-foreground" /> {ch}
-                            </div>
-                          ))}
-                          {cat.voice_channels.map(ch => (
-                            <div key={ch} className="flex items-center gap-2 text-sm text-foreground/80">
-                              <Volume2 className="w-3 h-3 text-muted-foreground" /> {ch}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </ScrollArea>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card/40 border-border">
-              <CardHeader>
-                <CardTitle>Detailed Channel Blueprint</CardTitle>
-                <CardDescription>Topics and specialized overrides.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ScrollArea className="h-[500px] pr-4">
-                  <div className="space-y-4">
-                    {data.channels.map((chan, idx) => (
-                      <div key={idx} className="bg-secondary/20 p-3 rounded-xl border border-border/50">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="font-bold flex items-center gap-2">
-                            <Hash className="w-4 h-4 text-accent" /> {chan.name}
-                          </span>
-                          <Badge variant="secondary" className="text-[10px] capitalize">{chan.type}</Badge>
-                        </div>
-                        {chan.topic && <p className="text-xs text-muted-foreground mb-2 italic">"{chan.topic}"</p>}
-                        <div className="flex flex-wrap gap-1 mt-2">
-                           {Object.entries(chan.permissions).map(([role, perms]) => (
-                             <Badge key={role} variant="outline" className="text-[9px] border-primary/20">
-                               {role}: {perms.length} perms
-                             </Badge>
-                           ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </ScrollArea>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="roles">
-          <Card className="bg-card/40 border-border">
+        <TabsContent value="hierarchy">
+          <Card className="bg-card/40 border-accent/20">
             <CardHeader>
-              <CardTitle>Role Hierarchy</CardTitle>
-              <CardDescription>Managed permissions and visual branding.</CardDescription>
+              <CardTitle className="font-headline uppercase">Administrative & Member Roles</CardTitle>
+              <CardDescription>Managed permission sets and visual identifier stacks.</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {data.roles.sort((a,b) => b.hierarchy_level - a.hierarchy_level).map((role, idx) => (
-                  <div key={idx} className="flex items-center gap-4 p-4 bg-secondary/20 rounded-2xl border border-border group hover:border-primary/40 transition-colors">
-                    <div className="w-2 h-12 rounded-full" style={{ backgroundColor: role.hex_color }} />
+                {data.roles.map((role, idx) => (
+                  <div key={idx} className="flex items-center gap-4 p-4 bg-secondary/10 rounded-xl border border-accent/5 hover:border-accent/20 transition-all">
+                    <div className="w-1.5 h-10 rounded-full" style={{ backgroundColor: role.color }} />
                     <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <h4 className="font-bold text-lg" style={{ color: role.hex_color }}>{role.name}</h4>
-                        <Badge variant="outline" className="text-[10px]">Rank {role.hierarchy_level}</Badge>
-                      </div>
-                      {role.description && <p className="text-xs text-muted-foreground mt-1">{role.description}</p>}
-                    </div>
-                    <div className="hidden md:flex flex-wrap gap-1 max-w-[300px] justify-end">
-                      {role.permissions.slice(0, 3).map(p => (
-                        <Badge key={p} variant="secondary" className="text-[9px]">{p}</Badge>
-                      ))}
-                      {role.permissions.length > 3 && (
-                        <Badge variant="outline" className="text-[9px]">+{role.permissions.length - 3} more</Badge>
-                      )}
+                       <h4 className="font-bold uppercase tracking-tight" style={{ color: role.color }}>{role.name}</h4>
+                       <div className="flex gap-2 mt-1">
+                          {role.permissions.map((p: string) => <Badge key={p} variant="secondary" className="text-[9px] uppercase">{p}</Badge>)}
+                          {role.hoist && <Badge className="text-[9px] bg-accent/20 text-accent border-accent/30">HOISTED</Badge>}
+                       </div>
                     </div>
                   </div>
                 ))}
@@ -241,79 +154,105 @@ export default function ServerResult({ data, onReset }: ServerResultProps) {
           </Card>
         </TabsContent>
 
-        <TabsContent value="bots">
-          <div className="grid md:grid-cols-2 gap-6">
-            {data.recommended_bots.map((bot, idx) => (
-              <Card key={idx} className="bg-card/40 border-primary/20 hover:border-accent/40 transition-all group">
-                <CardHeader className="flex flex-row items-center gap-4">
-                  <div className="bg-primary/20 p-3 rounded-2xl group-hover:bg-accent/20 transition-colors">
-                    <Bot className="w-8 h-8 text-accent" />
-                  </div>
-                  <div>
-                    <CardTitle className="group-hover:text-accent transition-colors">{bot.name}</CardTitle>
-                    <CardDescription>{bot.purpose}</CardDescription>
-                  </div>
+        <TabsContent value="channels">
+           <div className="grid md:grid-cols-2 gap-6">
+              <Card className="bg-card/40 border-accent/10">
+                <CardHeader>
+                   <CardTitle className="text-xs uppercase text-accent font-bold">Category Mapping</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="bg-secondary/40 p-4 rounded-xl text-sm leading-relaxed border border-border/50">
-                    <h5 className="font-bold text-xs uppercase tracking-widest text-muted-foreground mb-2 flex items-center gap-2">
-                      <Settings className="w-3 h-3" /> Config Suggestions
-                    </h5>
-                    {bot.config_suggestions}
-                  </div>
+                   <div className="space-y-4">
+                      {data.categories.map((cat, i) => (
+                        <div key={i} className="flex items-center justify-between p-3 bg-secondary/20 rounded-lg border border-accent/5">
+                           <span className="font-bold text-xs uppercase tracking-widest">{cat.name}</span>
+                           <Badge variant="outline" className="text-[10px]">POS: {cat.position}</Badge>
+                        </div>
+                      ))}
+                   </div>
                 </CardContent>
+              </Card>
+              <Card className="bg-card/40 border-accent/10">
+                <CardHeader>
+                   <CardTitle className="text-xs uppercase text-accent font-bold">Standard Channels</CardTitle>
+                </CardHeader>
+                <CardContent>
+                   <ScrollArea className="h-[400px]">
+                      <div className="space-y-2 pr-4">
+                        {data.channels.map((chan, i) => (
+                          <div key={i} className="flex items-center justify-between p-3 bg-secondary/10 rounded-lg">
+                             <span className="text-sm flex items-center gap-2">
+                               <Hash className="w-3 h-3 text-accent" /> {chan.name}
+                             </span>
+                             <Badge className="text-[9px] uppercase" variant="secondary">{chan.category}</Badge>
+                          </div>
+                        ))}
+                      </div>
+                   </ScrollArea>
+                </CardContent>
+              </Card>
+           </div>
+        </TabsContent>
+
+        <TabsContent value="automation">
+          <div className="grid md:grid-cols-2 gap-6">
+            {data.recommended_bots.map((bot, idx) => (
+              <Card key={idx} className="bg-card/40 border-accent/10 hover:border-accent/30 transition-all">
+                <CardHeader className="flex flex-row items-center gap-4">
+                  <div className="bg-accent/20 p-3 rounded-2xl">
+                    <Bot className="w-6 h-6 text-accent" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-sm font-bold uppercase">{bot.name}</CardTitle>
+                    <CardDescription className="text-xs">{bot.purpose}</CardDescription>
+                  </div>
+                </CardHeader>
               </Card>
             ))}
           </div>
         </TabsContent>
 
-        <TabsContent value="security">
+        <TabsContent value="protocols">
           <div className="grid md:grid-cols-2 gap-6">
-            <Card className="bg-card/40 border-border">
+            <Card className="bg-card/40 border-accent/10">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-accent" /> Moderation Core
-                </CardTitle>
-                <CardDescription>Policy and enforcement strategies.</CardDescription>
+                 <CardTitle className="flex items-center gap-2 text-sm uppercase">
+                    <Shield className="w-4 h-4 text-accent" /> Moderation Core
+                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase text-muted-foreground">Action Guidelines</label>
-                  <p className="text-sm text-foreground/80 bg-secondary/20 p-3 rounded-lg border border-border">{data.security_system.moderation_actions}</p>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase text-muted-foreground">Anti-Raid Measures</label>
-                  <p className="text-sm text-foreground/80 bg-secondary/20 p-3 rounded-lg border border-border">{data.security_system.anti_raid_measures || "N/A"}</p>
-                </div>
+                 <div className="p-3 bg-accent/5 rounded-lg border border-accent/10">
+                    <label className="text-[10px] uppercase text-muted-foreground font-bold">Security Level</label>
+                    <p className="font-bold text-accent">{data.security_system.level}</p>
+                 </div>
+                 <div className="flex justify-between p-3 bg-secondary/10 rounded-lg">
+                    <span className="text-xs">Anti-Spam</span>
+                    <Badge variant={data.security_system.anti_spam ? 'default' : 'outline'}>
+                      {data.security_system.anti_spam ? 'ACTIVE' : 'OFF'}
+                    </Badge>
+                 </div>
+                 <div className="flex justify-between p-3 bg-secondary/10 rounded-lg">
+                    <span className="text-xs">Anti-Raid</span>
+                    <Badge variant={data.security_system.anti_raid ? 'default' : 'outline'}>
+                      {data.security_system.anti_raid ? 'ACTIVE' : 'OFF'}
+                    </Badge>
+                 </div>
               </CardContent>
             </Card>
-
-            <Card className="bg-card/40 border-border">
+            <Card className="bg-card/40 border-accent/10">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MessageSquare className="w-5 h-5 text-accent" /> Welcome System
-                </CardTitle>
-                <CardDescription>Onboarding and member retention.</CardDescription>
+                 <CardTitle className="flex items-center gap-2 text-sm uppercase">
+                    <MessageSquare className="w-4 h-4 text-accent" /> Verification
+                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase text-muted-foreground">Process Overview</label>
-                  <p className="text-sm text-foreground/80 bg-secondary/20 p-3 rounded-lg border border-border">{data.welcome_system.overview}</p>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-secondary/40 rounded-lg">
-                  <span className="text-sm">Welcome Channel:</span>
-                  <Badge className="bg-primary">{data.welcome_system.welcome_channel_name || "#welcome"}</Badge>
-                </div>
-                {data.welcome_system.auto_role_assignment && (
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase text-muted-foreground">Auto-Roles</label>
-                    <div className="flex gap-2">
-                      {data.welcome_system.auto_role_assignment.map(role => (
-                        <Badge key={role} variant="outline" className="border-accent/40 text-accent">{role}</Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                 <div className="p-3 bg-accent/5 rounded-lg border border-accent/10">
+                    <label className="text-[10px] uppercase text-muted-foreground font-bold">Method</label>
+                    <p className="font-bold text-accent">{data.verification_system.method}</p>
+                 </div>
+                 <div className="p-3 bg-secondary/10 rounded-lg border border-accent/5">
+                    <label className="text-[10px] uppercase text-muted-foreground font-bold">Landing Zone</label>
+                    <p className="text-xs">#{data.channels.find(c => c.type === 'welcome')?.name || 'verify'}</p>
+                 </div>
               </CardContent>
             </Card>
           </div>

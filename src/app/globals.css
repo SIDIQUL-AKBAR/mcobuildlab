@@ -4,26 +4,26 @@
 
 @layer base {
   :root {
-    --background: 220 20% 10%;
+    --background: 230 25% 6%;
     --foreground: 0 0% 98%;
-    --card: 220 20% 12%;
+    --card: 230 25% 8%;
     --card-foreground: 0 0% 98%;
-    --popover: 220 20% 12%;
+    --popover: 230 25% 8%;
     --popover-foreground: 0 0% 98%;
-    --primary: 217 100% 62%;
+    --primary: 230 60% 50%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 220 20% 16%;
+    --secondary: 230 25% 12%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 220 20% 16%;
-    --muted-foreground: 220 10% 70%;
-    --accent: 192 100% 55%;
-    --accent-foreground: 220 20% 10%;
+    --muted: 230 25% 12%;
+    --muted-foreground: 230 15% 70%;
+    --accent: 195 100% 50%;
+    --accent-foreground: 230 25% 6%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 220 20% 18%;
-    --input: 220 20% 18%;
-    --ring: 192 100% 55%;
-    --radius: 0.75rem;
+    --border: 230 25% 15%;
+    --input: 230 25% 15%;
+    --ring: 195 100% 50%;
+    --radius: 0.5rem;
   }
 }
 
@@ -40,7 +40,16 @@
 }
 
 .blueprint-grid {
-  background-image: linear-gradient(rgba(26, 209, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(26, 209, 255, 0.05) 1px, transparent 1px);
-  background-size: 20px 20px;
+  background-image: linear-gradient(rgba(0, 204, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 204, 255, 0.05) 1px, transparent 1px);
+  background-size: 30px 30px;
+  background-position: center;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

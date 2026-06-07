@@ -1,194 +1,195 @@
 'use server';
 /**
- * @fileOverview A deterministic generator for Discord server structures.
- * This version generates blueprints locally without an external AI API for maximum reliability.
+ * @fileOverview MCO Build AI - Deterministic professional Discord infrastructure generator.
  */
 
 import { z } from 'genkit';
 
 const GenerateDiscordServerStructureInputSchema = z.object({
-  serverName: z.string().describe('The name of the Discord server.'),
-  serverType: z.enum(['Gaming', 'Community', 'Content Creator', 'YouTuber', 'Music', 'Art', 'Study', 'Business', 'Technology', 'AI', 'Roleplay', 'Anime', 'Roblox', 'Minecraft', 'Esports', 'Multi-Purpose', 'Other']).describe('The primary type or focus of the Discord server.'),
-  otherServerType: z.string().optional().describe('Description for server type if \'Other\' is selected.'),
-  serverSize: z.enum(['Under 100 Members', '100-500 Members', '500-1000 Members', '1000-5000 Members', '5000+ Members']).describe('The approximate expected size of the server community.'),
-  serverStyle: z.enum(['Modern', 'Gaming', 'Professional', 'Cyber', 'Premium', 'Aesthetic', 'Neon', 'Anime', 'Medieval', 'Futuristic']).describe('The aesthetic style of the Discord server.'),
-  features: z.array(z.enum(['Verification', 'Tickets', 'Giveaways', 'Suggestions', 'Applications', 'Auto Roles', 'Leveling', 'Economy', 'Partnerships', 'Music', 'Events', 'Polls', 'Server Stats', 'Temporary Voice Channels', 'Shop System', 'Custom Commands'])).describe('A list of desired features for the server.'),
-  securityLevel: z.enum(['Basic', 'Standard', 'Advanced', 'Maximum']).describe('The desired level of security and moderation for the server.'),
-  communityFeatures: z.array(z.enum(['General Chat', 'Events', 'Media Sharing', 'Creations', 'LFG System', 'Competitions', 'Announcements', 'Partnerships', 'Polls', 'Music Sharing'])).describe('A list of community engagement features.'),
-  staffSystem: z.enum(['Owner Only', 'Small Staff Team', 'Medium Staff Team', 'Large Staff Team']).describe('The expected size and structure of the staff team.'),
-  monetization: z.enum(['No', 'Donations', 'Products', 'Premium Memberships']).describe('The monetization strategy, if any.'),
-  language: z.enum(['English', 'English + Hindi', 'English + Malayalam', 'Multi-Language']).describe('The primary language(s) used in the server.'),
+  serverName: z.string(),
+  createMode: z.enum(['🆕 New Server', '🔄 Overwrite Existing Server', '📥 Import & Upgrade Existing Server']),
+  serverType: z.string(),
+  otherServerType: z.string().optional(),
+  serverSize: z.string(),
+  serverStyle: z.string(),
+  features: z.array(z.string()),
+  levelRolesCount: z.enum(['10', '25', '50', '100']).optional(),
+  generateColorRoles: z.boolean().optional(),
+  generateFunRoles: z.boolean().optional(),
+  generateAchievementRoles: z.boolean().optional(),
+  roleSystemSize: z.enum(['Small', 'Medium', 'Large', 'Massive']),
+  voiceSystemSize: z.enum(['Minimal', 'Standard', 'Large', 'Massive']),
+  categoryDensity: z.enum(['Compact', 'Standard', 'Large Community', 'Massive Community']),
+  serverComplexity: z.enum(['⚡ Starter', '🚀 Advanced', '🏆 Professional', '👑 Enterprise']),
+  securityLevel: z.string(),
+  communityFeatures: z.array(z.string()),
+  staffSystem: z.string(),
+  monetization: z.string(),
+  language: z.string(),
 });
 
 export type GenerateDiscordServerStructureInput = z.infer<typeof GenerateDiscordServerStructureInputSchema>;
 
 const GenerateDiscordServerStructureOutputSchema = z.object({
-  server_info: z.object({
-    name: z.string(),
-    type: z.string(),
-    size: z.string(),
-    style: z.string(),
-    language: z.string(),
-    description: z.string(),
-  }),
-  roles: z.array(z.object({
-    name: z.string(),
-    hex_color: z.string(),
-    permissions: z.array(z.string()),
-    hierarchy_level: z.number(),
-    description: z.string().optional(),
-  })),
-  categories: z.array(z.object({
-    name: z.string(),
-    description: z.string().optional(),
-    text_channels: z.array(z.string()),
-    voice_channels: z.array(z.string()),
-    permissions: z.record(z.string(), z.array(z.string())),
-  })),
-  channels: z.array(z.object({
-    name: z.string(),
-    type: z.enum(['text', 'announcement', 'forum', 'rules', 'welcome', 'logs', 'bot-commands']),
-    parent_category: z.string(),
-    topic: z.string().optional(),
-    permissions: z.record(z.string(), z.array(z.string())),
-  })),
-  voice_channels: z.array(z.object({
-    name: z.string(),
-    parent_category: z.string(),
-    topic: z.string().optional(),
-    permissions: z.record(z.string(), z.array(z.string())),
-  })),
-  permissions: z.object({
-    overview: z.string(),
-  }),
-  recommended_bots: z.array(z.object({
-    name: z.string(),
-    purpose: z.string(),
-    config_suggestions: z.string(),
-  })),
-  server_settings: z.object({
-    verification_level: z.string(),
-    explicit_content_filter: z.string(),
-    afk_timeout: z.string(),
-    system_messages_channel: z.string().optional(),
-    rules_channel: z.string().optional(),
-    onboarding_setup: z.string().optional(),
-  }),
-  welcome_system: z.object({
-    overview: z.string(),
-    welcome_channel_name: z.string().optional(),
-    auto_role_assignment: z.array(z.string()).optional(),
-  }),
-  security_system: z.object({
-    overview: z.string(),
-    moderation_actions: z.string(),
-    anti_raid_measures: z.string().optional(),
-    bot_security: z.string().optional(),
-  }),
-  growth_features: z.object({
-    overview: z.string(),
-    community_engagement_strategies: z.string(),
-    event_ideas: z.string().optional(),
-    partnership_guidelines: z.string().optional(),
-  }),
+  server_info: z.record(z.any()),
+  analysis: z.record(z.any()),
+  roles: z.array(z.record(z.any())),
+  level_roles: z.array(z.record(z.any())),
+  color_roles: z.array(z.record(z.any())),
+  achievement_roles: z.array(z.record(z.any())),
+  fun_roles: z.array(z.record(z.any())),
+  notification_roles: z.array(z.record(z.any())),
+  interest_roles: z.array(z.record(z.any())),
+  categories: z.array(z.record(z.any())),
+  channels: z.array(z.record(z.any())),
+  voice_channels: z.array(z.record(z.any())),
+  stage_channels: z.array(z.record(z.any())),
+  permissions: z.record(z.any()),
+  category_permissions: z.record(z.any()),
+  channel_permissions: z.record(z.any()),
+  role_positions: z.record(z.any()),
+  channel_positions: z.record(z.any()),
+  auto_roles: z.record(z.any()),
+  reaction_roles: z.record(z.any()),
+  welcome_system: z.record(z.any()),
+  verification_system: z.record(z.any()),
+  security_system: z.record(z.any()),
+  staff_system: z.record(z.any()),
+  ticket_system: z.record(z.any()),
+  economy_system: z.record(z.any()),
+  event_system: z.record(z.any()),
+  onboarding_setup: z.record(z.any()),
+  recommended_bots: z.array(z.record(z.any())),
+  bot_configurations: z.array(z.record(z.any())),
+  growth_features: z.record(z.any()),
+  server_settings: z.record(z.any()),
 });
 
 export type GenerateDiscordServerStructureOutput = z.infer<typeof GenerateDiscordServerStructureOutputSchema>;
 
 export async function generateDiscordServerStructure(input: GenerateDiscordServerStructureInput): Promise<GenerateDiscordServerStructureOutput> {
-  // Simulate network delay for a better UX
-  await new Promise(resolve => setTimeout(resolve, 1500));
+  // Simulate heavy processing
+  await new Promise(resolve => setTimeout(resolve, 2000));
 
-  const roles = [
-    { name: 'Founder', hex_color: '#FF0000', permissions: ['ADMINISTRATOR'], hierarchy_level: 100, description: 'The visionary leader of the community.' },
-    { name: 'Admin', hex_color: '#E91E63', permissions: ['MANAGE_GUILD', 'MANAGE_ROLES', 'KICK_MEMBERS'], hierarchy_level: 90, description: 'Server administration and management.' },
-    { name: 'Moderator', hex_color: '#2ECC71', permissions: ['BAN_MEMBERS', 'KICK_MEMBERS', 'MANAGE_MESSAGES'], hierarchy_level: 80, description: 'Maintaining order and enforcing rules.' },
-    { name: 'Member', hex_color: '#3498DB', permissions: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'READ_MESSAGE_HISTORY'], hierarchy_level: 10, description: 'Standard community member.' }
+  const roleList = [
+    { name: 'Founder', color: '#FF0000', hoist: true, mentionable: true, permissions: ['ADMINISTRATOR'] },
+    { name: 'Admin', color: '#E91E63', hoist: true, mentionable: true, permissions: ['MANAGE_GUILD', 'MANAGE_ROLES'] },
+    { name: 'Moderator', color: '#2ECC71', hoist: true, mentionable: true, permissions: ['BAN_MEMBERS', 'KICK_MEMBERS', 'MANAGE_MESSAGES'] },
+    { name: 'Support', color: '#3498DB', hoist: true, mentionable: true, permissions: ['MANAGE_THREADS'] },
+    { name: 'Elite Member', color: '#F1C40F', hoist: true, mentionable: false, permissions: [] },
+    { name: 'Member', color: '#95A5A6', hoist: false, mentionable: false, permissions: [] },
+    { name: 'Unverified', color: '#7F8C8D', hoist: false, mentionable: false, permissions: [] }
   ];
 
-  if (input.serverType === 'Gaming') {
-    roles.push({ name: 'Pro Gamer', hex_color: '#F1C40F', permissions: ['VIEW_CHANNEL'], hierarchy_level: 20, description: 'Veteran players with high skill.' });
-  }
-
-  const categories = [
-    { 
-      name: 'INFORMATION', 
-      description: 'Crucial server details', 
-      text_channels: ['rules', 'announcements', 'info'], 
-      voice_channels: [],
-      permissions: { 'Member': ['VIEW_CHANNEL'], '@everyone': ['VIEW_CHANNEL'] }
-    },
-    { 
-      name: 'COMMUNITY', 
-      description: 'The heart of the server', 
-      text_channels: ['general', 'media', 'bot-commands'], 
-      voice_channels: ['General Voice', 'Music Chat'],
-      permissions: { 'Member': ['VIEW_CHANNEL', 'SEND_MESSAGES'] }
+  const levelRoles = [];
+  if (input.features.includes('Leveling')) {
+    const count = parseInt(input.levelRolesCount || '10');
+    for (let i = 1; i <= count; i++) {
+      levelRoles.push({ name: `Level ${i}`, color: '#5865F2', requirement: i });
     }
-  ];
-
-  if (input.features.includes('Tickets')) {
-    categories.push({
-      name: 'SUPPORT',
-      description: 'Get help from staff',
-      text_channels: ['create-ticket'],
-      voice_channels: [],
-      permissions: { 'Moderator': ['VIEW_CHANNEL'] }
-    });
   }
 
-  const channels: any[] = [
-    { name: 'rules', type: 'rules', parent_category: 'INFORMATION', topic: 'The law of the land.', permissions: {} },
-    { name: 'announcements', type: 'announcement', parent_category: 'INFORMATION', topic: 'Stay updated with server news.', permissions: {} },
-    { name: 'general', type: 'text', parent_category: 'COMMUNITY', topic: 'Casual conversation for everyone.', permissions: {} },
-    { name: 'bot-commands', type: 'bot-commands', parent_category: 'COMMUNITY', topic: 'Interact with our automation.', permissions: {} }
-  ];
-
-  const voice_channels: any[] = [
-    { name: 'General Voice', parent_category: 'COMMUNITY', topic: 'Hang out and talk.', permissions: {} },
-    { name: 'Lounge', parent_category: 'COMMUNITY', topic: 'Quiet space for relaxing.', permissions: {} }
-  ];
-
-  const bots = [
-    { name: 'Dyno', purpose: 'Auto-moderation and utility.', config_suggestions: 'Enable auto-mod filters and custom commands for common questions.' },
-    { name: 'MEE6', purpose: 'Leveling and welcome messages.', config_suggestions: 'Setup rank rewards to encourage member activity.' }
+  const channels = [
+    { name: 'rules', type: 'rules', category: 'INFORMATION', position: 0 },
+    { name: 'announcements', type: 'announcement', category: 'INFORMATION', position: 1 },
+    { name: 'welcome', type: 'welcome', category: 'INFORMATION', position: 2 },
+    { name: 'general-chat', type: 'text', category: 'COMMUNITY', position: 0 },
+    { name: 'support', type: 'text', category: 'SUPPORT', position: 0 },
+    { name: 'tickets', type: 'text', category: 'SUPPORT', position: 1 },
+    { name: 'server-stats', type: 'text', category: 'STATISTICS', position: 0 },
+    { name: 'join-log', type: 'logs', category: 'LOGS', position: 0 },
+    { name: 'leave-log', type: 'logs', category: 'LOGS', position: 1 },
+    { name: 'mod-log', type: 'logs', category: 'LOGS', position: 2 }
   ];
 
   return {
     server_info: {
       name: input.serverName,
+      mode: input.createMode,
       type: input.serverType,
       size: input.serverSize,
       style: input.serverStyle,
-      language: input.language,
-      description: `A robust ${input.serverStyle} blueprint for a ${input.serverType} community. This architecture focuses on ${input.securityLevel} security and scalable ${input.staffSystem} management.`
+      language: input.language
     },
-    roles,
-    categories,
-    channels,
-    voice_channels,
+    analysis: {
+      complexity: input.serverComplexity,
+      density: input.categoryDensity,
+      security_baseline: input.securityLevel
+    },
+    roles: roleList,
+    level_roles: levelRoles,
+    color_roles: input.generateColorRoles ? [{ name: 'Red', color: '#E74C3C' }, { name: 'Blue', color: '#3498DB' }] : [],
+    achievement_roles: input.generateAchievementRoles ? [{ name: 'Top Supporter', color: '#9B59B6' }] : [],
+    fun_roles: input.generateFunRoles ? [{ name: 'Gamer', color: '#2ECC71' }] : [],
+    notification_roles: [{ name: 'Announcement Ping', color: '#B9BBBE' }],
+    interest_roles: [],
+    categories: [
+      { name: 'INFORMATION', position: 0 },
+      { name: 'COMMUNITY', position: 1 },
+      { name: 'SUPPORT', position: 2 },
+      { name: 'LOGS', position: 3 },
+      { name: 'STATISTICS', position: 4 }
+    ],
+    channels: channels,
+    voice_channels: [
+      { name: 'Lounge', category: 'COMMUNITY' },
+      { name: 'AFK', category: 'COMMUNITY' }
+    ],
+    stage_channels: [],
     permissions: {
-      overview: "Hierarchical structure with locked administrative categories and open community areas."
+      default: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY'],
+      staff: ['MANAGE_MESSAGES', 'MUTE_MEMBERS']
     },
-    recommended_bots: bots,
-    server_settings: {
-      verification_level: input.securityLevel === 'Maximum' ? 'Very High' : 'Medium',
-      explicit_content_filter: 'Scan messages from all members',
-      afk_timeout: '15 minutes',
-      rules_channel: '#rules'
-    },
+    category_permissions: {},
+    channel_permissions: {},
+    role_positions: { 'Founder': 1, 'Admin': 2, 'Moderator': 3 },
+    channel_positions: {},
+    auto_roles: { 'on_join': ['Unverified'] },
+    reaction_roles: {},
     welcome_system: {
-      overview: "Automated greeting in #welcome with rules acceptance via button.",
-      welcome_channel_name: "#welcome",
-      auto_role_assignment: ['Member']
+      enabled: true,
+      channel: 'welcome',
+      onboarding: true
+    },
+    verification_system: {
+      enabled: input.features.includes('Verification'),
+      method: 'Button Reaction',
+      role: 'Member'
     },
     security_system: {
-      overview: "Standard logging of all moderator actions and member join/leave events.",
-      moderation_actions: "Warn -> Mute -> Kick -> Ban progression."
+      level: input.securityLevel,
+      anti_spam: true,
+      anti_raid: input.securityLevel === 'Maximum'
     },
+    staff_system: {
+      size: input.staffSystem,
+      hierarchy: ['Owner', 'Admin', 'Mod', 'Trial']
+    },
+    ticket_system: {
+      enabled: input.features.includes('Tickets'),
+      category: 'SUPPORT'
+    },
+    economy_system: {
+      enabled: input.features.includes('Economy'),
+      currency: 'Credits'
+    },
+    event_system: {
+      enabled: input.features.includes('Events')
+    },
+    onboarding_setup: {
+      flow: ['Welcome', 'Rules', 'Verify', 'Roles']
+    },
+    recommended_bots: [
+      { name: 'Carl-bot', purpose: 'Reaction roles and utility' },
+      { name: 'Wick', purpose: 'Advanced security and anti-raid' }
+    ],
+    bot_configurations: [],
     growth_features: {
-      overview: "Incentivized engagement through leveling and community events.",
-      community_engagement_strategies: "Weekly community nights and regular polls."
+      overview: "Partnership systems and automated bumps enabled."
+    },
+    server_settings: {
+      verification_level: 'High',
+      explicit_content_filter: 'All Members'
     }
   };
 }

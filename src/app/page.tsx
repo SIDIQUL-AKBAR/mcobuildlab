@@ -1,5 +1,5 @@
 import WizardForm from '@/components/WizardForm';
-import { LayoutDashboard } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -7,15 +7,16 @@ export default function Home() {
       <div className="max-w-7xl mx-auto px-4 py-12">
         <header className="mb-12 text-center">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="bg-primary/20 p-3 rounded-2xl border border-primary/30">
-              <LayoutDashboard className="w-8 h-8 text-accent" />
+            <div className="bg-accent/20 p-3 rounded-2xl border border-accent/30">
+              <ShieldCheck className="w-8 h-8 text-accent" />
             </div>
-            <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-white to-accent bg-clip-text text-transparent">
-              GuildArchitect AI
+            <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-white to-accent bg-clip-text text-transparent uppercase font-headline">
+              MCO Build AI
             </h1>
           </div>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Professional Discord Server Architect. Designing scalable, production-ready communities through intelligent blueprints.
+            Professional Discord Server Architect & Infrastructure Designer. 
+            Generating production-ready blueprints for elite communities.
           </p>
         </header>
 

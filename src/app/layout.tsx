@@ -2,8 +2,8 @@ import type {Metadata} from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'GuildArchitect AI - Discord Server Architect',
-  description: 'Generate professional, scalable, and production-ready Discord server structures with AI.',
+  title: 'MCO Build AI - Professional Discord Infrastructure Designer',
+  description: 'Design production-ready Discord servers that can be automatically imported and managed.',
 };
 
 export default function RootLayout({
