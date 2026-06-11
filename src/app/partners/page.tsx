@@ -2,38 +2,39 @@ import { Users, ExternalLink, Shield, Zap, Globe, Star, CheckCircle2, Trophy } f
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import Image from 'next/image';
 
 const PARTNERS = [
   {
-    name: "MCO Build Lab Official",
+    name: "MCO – Master Coding Organisation",
     description: "The primary architectural hub for all Discord developers using MCO technologies. Access exclusive blueprints and beta tools.",
-    members: "15.4k",
+    logo: "https://cdn.discordapp.com/icons/1369162397486678036/fc814990828cfbb862cff23d776018a5.webp",
+    invite: "https://discord.gg/vNcpNQmAJH",
     tag: "Official Node",
-    link: "https://mcobuildlab.base44.app",
     featured: true
   },
   {
-    name: "Developer Haven",
-    description: "An elite professional network for community builders and software engineers focused on high-performance infrastructure.",
-    members: "5.2k",
+    name: "Chill Verse",
+    description: "A relaxed community space for hanging out and sharing interests in a structured, welcoming environment.",
+    logo: "https://cdn.discordapp.com/icons/1510104114011308132/20838027e4af3b0563c2727730f60a3e.webp",
+    invite: "https://discord.gg/A7vWEaEVk7",
     tag: "Verified Node",
-    link: "#",
     featured: false
   },
   {
-    name: "Global Esports Network",
-    description: "The industry standard for competitive gaming server structures. Architected entirely using MCO Build Lab protocols.",
-    members: "28.9k",
-    tag: "Premium Node",
-    link: "#",
+    name: "Hangout Kerala",
+    description: "The premium regional community for connections, discussions, and shared cultural growth.",
+    logo: "https://cdn.discordapp.com/icons/1502513880503681085/8959ba860b5b772db1f0bf7332a75360.webp",
+    invite: "https://discord.gg/tZQE3WYqQc",
+    tag: "Verified Node",
     featured: false
   },
   {
-    name: "AI Research Collective",
-    description: "A collaborative space for AI enthusiasts and researchers. Built with advanced security and categorization logic.",
-    members: "3.1k",
-    tag: "Verified Node",
-    link: "#",
+    name: "Williams Group Chat Server",
+    description: "An elite professional network focused on communication and high-performance server infrastructure.",
+    logo: "https://cdn.discordapp.com/icons/1444037416003440737/541bf646430bd95c41d3a04f397a1f8b.webp",
+    invite: "https://discord.gg/VvhDdK6YRG",
+    tag: "Partner Node",
     featured: false
   }
 ];
@@ -67,22 +68,26 @@ export default function PartnersPage() {
             )}
             <CardContent className="p-8 space-y-6">
               <div className="flex justify-between items-start">
+                <div className="relative h-16 w-16 rounded-2xl overflow-hidden border border-accent/20 bg-background/50">
+                  <Image 
+                    src={partner.logo} 
+                    alt={partner.name} 
+                    fill 
+                    className="object-cover"
+                    unoptimized
+                  />
+                </div>
                 <Badge variant="outline" className={`border-accent/20 text-accent bg-accent/5 px-3 py-1 ${partner.featured ? 'bg-accent/20 border-accent/40' : ''}`}>
                   {partner.tag}
                 </Badge>
-                <CheckCircle2 className={`w-5 h-5 transition-colors ${partner.featured ? 'text-accent' : 'text-accent/20 group-hover:text-accent'}`} />
               </div>
               <div className="space-y-2">
                 <h3 className="text-2xl font-bold uppercase tracking-tight group-hover:text-accent transition-colors">{partner.name}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed h-12 line-clamp-2 italic">{partner.description}</p>
               </div>
               <div className="flex items-center justify-between pt-6 border-t border-accent/5">
-                <div className="flex flex-col">
-                  <span className="text-[10px] font-bold text-accent uppercase tracking-widest">Active Nodes</span>
-                  <span className="text-lg font-bold">{partner.members}</span>
-                </div>
-                <Button asChild size="lg" variant={partner.featured ? "default" : "outline"} className={`font-bold uppercase tracking-widest px-8 rounded-xl ${partner.featured ? 'bg-accent text-accent-foreground' : 'border-accent/20 text-accent hover:bg-accent/10'}`}>
-                  <a href={partner.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                <Button asChild size="lg" variant={partner.featured ? "default" : "outline"} className={`font-bold uppercase tracking-widest px-8 rounded-xl w-full ${partner.featured ? 'bg-accent text-accent-foreground' : 'border-accent/20 text-accent hover:bg-accent/10'}`}>
+                  <a href={partner.invite} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                     Join Node <ExternalLink className="w-4 h-4" />
                   </a>
                 </Button>
@@ -101,7 +106,7 @@ export default function PartnersPage() {
           <h2 className="text-3xl font-headline font-bold uppercase tracking-tighter">Apply for Partnership</h2>
           <p className="text-muted-foreground max-w-md leading-relaxed">
             Does your community maintain the architectural standards of the <strong>Master Coding Organisation</strong>? 
-            Apply today to feature your node in our global network and gain access to premium building assets.
+            Apply today to feature your node in our global network.
           </p>
         </div>
         <div className="relative z-10">
