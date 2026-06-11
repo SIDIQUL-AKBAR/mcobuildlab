@@ -1,47 +1,133 @@
-import WizardForm from '@/components/WizardForm';
-import { ShieldCheck, ExternalLink, LayoutGrid } from 'lucide-react';
+import Link from 'next/link';
+import { 
+  Zap, 
+  ShieldCheck, 
+  LayoutTemplate, 
+  Globe, 
+  ChevronRight, 
+  ExternalLink,
+  LayoutGrid,
+  Bot,
+  Layers,
+  Code
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <main className="min-h-screen blueprint-grid relative">
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <header className="mb-12 text-center">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <div className="bg-accent/20 p-3 rounded-2xl border border-accent/30">
-              <LayoutGrid className="w-8 h-8 text-accent" />
-            </div>
-            <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-white to-accent bg-clip-text text-transparent uppercase font-headline">
-              MCO Build Lab
-            </h1>
-          </div>
-          <div className="mb-6">
-            <p className="text-accent/60 text-[10px] font-bold uppercase tracking-[0.3em] mb-1">
-              A tool by Master Coding Organisation
-            </p>
-            <p className="text-muted-foreground/40 text-[9px] uppercase tracking-widest">
-              Developed by Sidiqul Akbar
-            </p>
-          </div>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-8">
-            Elite Discord Server Architect & Structure Designer. 
-            Blueprint production-ready channels, roles, and rules for professional communities.
-          </p>
-          <div className="flex justify-center">
-            <Button asChild variant="outline" className="border-accent/30 hover:bg-accent/10 text-accent gap-2">
-              <a href="https://mcobuildlab.base44.app" target="_blank" rel="noopener noreferrer">
-                MCO Build Lab Discord Server Builder <ExternalLink className="w-4 h-4" />
-              </a>
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Hero Section */}
+      <section className="container px-4 py-24 mx-auto text-center relative z-10">
+        <div className="inline-flex items-center gap-2 px-3 py-1 mb-8 rounded-full bg-accent/10 border border-accent/20 text-accent animate-in fade-in slide-in-from-top-4 duration-700">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+          </span>
+          <span className="text-[10px] font-bold uppercase tracking-widest">System Online: Infrastructure Ready</span>
+        </div>
+        
+        <h1 className="text-5xl md:text-7xl font-bold tracking-tighter font-headline mb-6 bg-gradient-to-b from-white to-white/60 bg-clip-text text-transparent uppercase">
+          Build Better <span className="text-accent">Discord</span> <br /> Infrastructure
+        </h1>
+        
+        <p className="max-w-2xl mx-auto text-muted-foreground text-lg md:text-xl mb-10 leading-relaxed">
+          MCO Build Lab is the ultimate architect for professional Discord communities. 
+          Generate production-ready channel structures, role hierarchies, and security protocols in seconds.
+        </p>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Link href="/architect">
+            <Button size="lg" className="h-14 px-10 bg-accent text-accent-foreground hover:bg-accent/90 shadow-2xl shadow-accent/20 text-lg font-bold rounded-2xl group uppercase tracking-widest">
+              Launch Architect <Zap className="w-5 h-5 ml-2 transition-transform group-hover:scale-125" />
             </Button>
+          </Link>
+          <Button asChild variant="outline" size="lg" className="h-14 px-10 border-accent/30 hover:bg-accent/10 text-accent text-lg font-bold rounded-2xl uppercase tracking-widest">
+            <a href="https://mcobuildlab.base44.app" target="_blank" rel="noopener noreferrer">
+              Official Builder <ExternalLink className="w-4 h-4 ml-2" />
+            </a>
+          </Button>
+        </div>
+      </section>
+
+      {/* Stats/Features Section */}
+      <section className="container px-4 py-20 mx-auto relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <FeatureCard 
+            icon={ShieldCheck} 
+            title="Enterprise Security" 
+            description="Multi-layered role hierarchies and permission matrices designed to prevent raids and unauthorized access."
+          />
+          <FeatureCard 
+            icon={Bot} 
+            title="Bot Integration" 
+            description="Pre-configured suggestions for industry-standard bots like Carl-bot, Dyno, and Wick with recommended settings."
+          />
+          <FeatureCard 
+            icon={Layers} 
+            title="Scalable Logic" 
+            description="Dynamically scaling infrastructure that grows from a small community to a massive enterprise network."
+          />
+        </div>
+      </section>
+
+      {/* Preview Section */}
+      <section className="container px-4 py-20 mx-auto border-t border-accent/10 relative z-10">
+        <div className="flex flex-col lg:flex-row items-center gap-12">
+          <div className="lg:w-1/2 space-y-6">
+            <div className="p-3 bg-accent/20 rounded-2xl border border-accent/30 w-fit">
+              <Code className="w-6 h-6 text-accent" />
+            </div>
+            <h2 className="text-4xl font-headline font-bold uppercase tracking-tight">Export Ready Blueprints</h2>
+            <p className="text-muted-foreground text-lg leading-relaxed">
+              Every design generated by MCO Build Lab results in a valid, import-ready JSON blueprint. 
+              Take your architecture and deploy it instantly using our official builder tool or supported third-party bots.
+            </p>
+            <ul className="space-y-3">
+              {['100+ Levels Support', 'Categorized Permission Mapping', 'Custom Rule Generation', 'Automated Welcome Protocols'].map((item) => (
+                <li key={item} className="flex items-center gap-3 text-sm font-medium">
+                  <div className="h-1.5 w-1.5 rounded-full bg-accent" />
+                  {item}
+                </li>
+              ))}
+            </ul>
           </div>
-        </header>
+          <div className="lg:w-1/2 relative">
+             <div className="aspect-video bg-card/40 border border-accent/20 rounded-3xl overflow-hidden backdrop-blur-3xl p-8 relative group shadow-2xl">
+                <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="space-y-4">
+                   <div className="h-4 w-3/4 bg-accent/20 rounded-full" />
+                   <div className="h-4 w-1/2 bg-accent/10 rounded-full" />
+                   <div className="grid grid-cols-3 gap-4 mt-8">
+                      {[1,2,3].map(i => <div key={i} className="aspect-square bg-card border border-accent/10 rounded-xl" />)}
+                   </div>
+                </div>
+                <div className="absolute bottom-8 right-8">
+                   <LayoutGrid className="w-24 h-24 text-accent/10 animate-pulse" />
+                </div>
+             </div>
+          </div>
+        </div>
+      </section>
 
-        <section className="relative z-10">
-          <WizardForm />
-        </section>
-      </div>
+      <footer className="container px-4 py-12 mx-auto text-center border-t border-accent/10 text-muted-foreground relative z-10">
+        <p className="text-[10px] uppercase font-bold tracking-[0.4em] mb-2">Master Coding Organisation</p>
+        <p className="text-[9px] uppercase tracking-widest opacity-40">Developed by Sidiqul Akbar • MCO Build Lab © 2024</p>
+      </footer>
+    </div>
+  );
+}
 
-      <div className="fixed bottom-0 left-0 w-full h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
-    </main>
+function FeatureCard({ icon: Icon, title, description }: { icon: any, title: string, description: string }) {
+  return (
+    <Card className="bg-card/30 border-accent/10 hover:border-accent/40 transition-all hover:translate-y-[-4px] backdrop-blur-md">
+      <CardContent className="p-8 space-y-4">
+        <div className="bg-accent/10 p-4 rounded-2xl w-fit border border-accent/20 shadow-inner">
+          <Icon className="w-6 h-6 text-accent" />
+        </div>
+        <h3 className="text-xl font-headline font-bold uppercase tracking-tight">{title}</h3>
+        <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
+      </CardContent>
+    </Card>
   );
 }
