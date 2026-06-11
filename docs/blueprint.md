@@ -1,4 +1,4 @@
-# **App Name**: GuildArchitect AI
+# **App Name**: MCOBUILDLAB
 
 ## Core Features:
 
