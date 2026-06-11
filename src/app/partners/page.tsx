@@ -1,4 +1,4 @@
-import { Users, ExternalLink, Shield, Zap, Globe, Star, CheckCircle2, Trophy } from 'lucide-react';
+import { Users, ExternalLink, Shield, Zap, Globe, Star, CheckCircle2, Trophy, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -97,21 +97,32 @@ export default function PartnersPage() {
         ))}
       </div>
 
-      <section className="bg-accent/5 border border-accent/10 rounded-[2.5rem] p-12 flex flex-col md:flex-row items-center gap-10 justify-between relative overflow-hidden group">
+      <section className="bg-accent/5 border border-accent/10 rounded-[2.5rem] p-10 md:p-12 flex flex-col md:flex-row items-center gap-10 justify-between relative overflow-hidden group">
         <div className="absolute inset-0 bg-gradient-to-r from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-        <div className="space-y-4 text-center md:text-left relative z-10">
+        <div className="space-y-6 text-center md:text-left relative z-10">
           <div className="bg-accent/20 p-2 rounded-xl w-fit mx-auto md:mx-0">
              <Shield className="w-6 h-6 text-accent" />
           </div>
-          <h2 className="text-3xl font-headline font-bold uppercase tracking-tighter">Apply for Partnership</h2>
-          <p className="text-muted-foreground max-w-md leading-relaxed">
-            Does your community maintain the architectural standards of the <strong>Master Coding Organisation</strong>? 
-            Apply today to feature your node in our global network.
-          </p>
+          <div className="space-y-2">
+            <h2 className="text-3xl font-headline font-bold uppercase tracking-tighter">Become a Partner</h2>
+            <p className="text-muted-foreground max-w-md leading-relaxed">
+              Want to feature your community in our global network? Join the official <strong>Master Coding Organisation</strong> server and promote your community in our partnership channels.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+             <div className="flex items-center gap-2 text-[10px] font-bold uppercase text-accent tracking-widest bg-accent/10 px-3 py-1 rounded-full border border-accent/20">
+               <CheckCircle2 className="w-3 h-3" /> Step 1: Join MCO Server
+             </div>
+             <div className="flex items-center gap-2 text-[10px] font-bold uppercase text-accent tracking-widest bg-accent/10 px-3 py-1 rounded-full border border-accent/20">
+               <CheckCircle2 className="w-3 h-3" /> Step 2: Promote Your Node
+             </div>
+          </div>
         </div>
         <div className="relative z-10">
-          <Button size="lg" className="bg-accent text-accent-foreground font-bold uppercase tracking-widest px-12 h-16 rounded-2xl shadow-xl shadow-accent/20 hover:scale-105 transition-transform">
-            Submit Application
+          <Button asChild size="lg" className="bg-accent text-accent-foreground font-bold uppercase tracking-widest px-12 h-16 rounded-2xl shadow-xl shadow-accent/20 hover:scale-105 transition-transform group">
+            <a href="https://discord.gg/vNcpNQmAJH" target="_blank" rel="noopener noreferrer">
+              Join & Apply <MessageCircle className="w-5 h-5 ml-2 group-hover:animate-bounce" />
+            </a>
           </Button>
         </div>
       </section>
